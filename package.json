@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "nodemon src/main.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"

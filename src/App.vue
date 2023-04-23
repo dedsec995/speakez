@@ -29,7 +29,7 @@ const runSpeechRecognition = () => {
         output.value = transcript
 
         try {
-          let res = await axios.post('api/text-to-audio-file', {
+          let res = await axios.post('http://localhost:4001/api/text-to-audio-file', {
             text: event.results[0][0].transcript
           })
 

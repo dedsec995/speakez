@@ -11,6 +11,9 @@ const openai = new OpenAIApi(configuration);
 const AWS = require("aws-sdk");
 AWS.config.loadFromPath("awsCreds.json");
 
+const s3 = new AWS.S3();
+const bbuckt = "speakez";
+
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -42,6 +45,16 @@ app.post('/api/text-to-audio-file', async (req, res) => {
         let fileName = num + ".mp3";
 
         if (num) fs.writeFileSync(filePath + fileName, data.AudioStream)
+
+        if (num) (async() =>{await s3.putObject({
+            Body:data.AudioStream,
+            Bucket: bbuckt,
+            Key: fileName,
+            ContentType: ';audio/mpeg'
+        })
+        .promise();
+    })();  
+
     })
 
     setTimeout(() => { res.status(200).json(num) }, 4500)
