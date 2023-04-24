@@ -11,11 +11,33 @@ const openai = new OpenAIApi(configuration);
 const AWS = require("aws-sdk");
 AWS.config.loadFromPath("awsCreds.json");
 
+//-------------------S3-----------------------------
+
 const s3 = new AWS.S3();
 const bbuckt = "speakez";
 
+//-------------------S3 END-------------------------
+
 app.use(bodyParser.json());
 app.use(cors());
+
+//------------------------------------- AWS IOT config & object --------------------------------------------------------
+
+const awsIot = require('aws-iot-device-sdk');
+
+const device = awsIot.device({
+    keyPath: './AWS_secrets/private.pem.key',
+    certPath: './AWS_secrets/certificate.pem.crt',
+    caPath: './AWS_secrets/AmazonRootCA1.pem',
+    clientId: 'raspberryThing',
+    port: 8883,
+    clientId: 'client', // Set client ID to 'client'
+    region: 'us-east-1',
+    host: 'a3rrqwl14ozs4u-ats.iot.us-east-1.amazonaws.com',
+});
+
+//---------------------------------------------Ends Here--------------------------------------------------------------
+
 
 app.post('/api/text-to-audio-file', async (req, res) => {
 
@@ -59,6 +81,43 @@ app.post('/api/text-to-audio-file', async (req, res) => {
 
     setTimeout(() => { res.status(200).json(num) }, 4500)
 })
+
+//--------------------------------Light On------------------------------------
+
+app.post('/api/aws-iot', async (req, res) => {
+
+    console.log("Called me");
+    let num = (Math.random() * 100000000).toFixed(0);
+
+    device.publish('topic_1', JSON.stringify(req.body.text), (error) => {
+        if (error) {
+            console.error('Failed to publish data:', error);
+        } else {
+            console.log('Data published successfully');
+        }
+    });   
+    setTimeout(() => { res.status(200).json(num) }, 4500)
+})
+
+//--------------------------------Light ON------------------------------------
+
+//--------------------------------Light OFF------------------------------------
+
+app.post('/api/turn-off-light', async (req, res) => {
+
+    let num = (Math.random() * 100000000).toFixed(0);
+
+    device.publish('topic_1', JSON.stringify(req.body.text), (error) => {
+        if (error) {
+            console.error('Failed to publish data:', error);
+        } else {
+            console.log('Data published successfully');
+        }
+    });   
+    setTimeout(() => { res.status(200).json(num) }, 4500)
+})
+
+//--------------------------------Light OFF-----------------------------------
 
 // Change the Directory
 app.use(express.static(process.cwd() + '/dist'));
