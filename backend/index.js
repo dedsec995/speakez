@@ -41,7 +41,7 @@ app.post('/api/text-to-audio-file', async (req, res) => {
             return;
         }
 
-        let filePath = "../public/voice/";
+        let filePath = "/app/dist/voice/";
         let fileName = num + ".mp3";
 
         if (num) fs.writeFileSync(filePath + fileName, data.AudioStream)
@@ -61,11 +61,11 @@ app.post('/api/text-to-audio-file', async (req, res) => {
 })
 
 // Change the Directory
-app.use(express.static(process.cwd() + '/../dist'));
+app.use(express.static(process.cwd() + '/dist'));
 
 // Change the Directory
 app.get('/', (req,res) => {
-    res.sendFile(process.cwd() + '/../dist/index.html');
+    res.sendFile(process.cwd() + '/dist/index.html');
   });
   
 app.listen(4001, () => { 
