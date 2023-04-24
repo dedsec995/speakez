@@ -40,7 +40,7 @@ const device = awsIot.device({
 
 
 app.post('/api/text-to-audio-file', async (req, res) => {
-
+    console.log("Inside CHATGPT")
     const completion = await openai.createCompletion({
         model: "text-davinci-003",
         prompt: req.body.text,
@@ -86,7 +86,6 @@ app.post('/api/text-to-audio-file', async (req, res) => {
 
 app.post('/api/aws-iot', async (req, res) => {
 
-    console.log("Called me");
     let num = (Math.random() * 100000000).toFixed(0);
 
     device.publish('topic_1', JSON.stringify(req.body.text), (error) => {
@@ -100,24 +99,6 @@ app.post('/api/aws-iot', async (req, res) => {
 })
 
 //--------------------------------Light ON------------------------------------
-
-//--------------------------------Light OFF------------------------------------
-
-app.post('/api/turn-off-light', async (req, res) => {
-
-    let num = (Math.random() * 100000000).toFixed(0);
-
-    device.publish('topic_1', JSON.stringify(req.body.text), (error) => {
-        if (error) {
-            console.error('Failed to publish data:', error);
-        } else {
-            console.log('Data published successfully');
-        }
-    });   
-    setTimeout(() => { res.status(200).json(num) }, 4500)
-})
-
-//--------------------------------Light OFF-----------------------------------
 
 // Change the Directory
 app.use(express.static(process.cwd() + '/dist'));

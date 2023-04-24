@@ -6,8 +6,6 @@ openssl x509 -req -CA myAwesomeCA.cer -CAkey myAwesomeCA.pvk -in myAwesomeServer
 
 openssl s_server -accept 15000 -cert myAwesomeServer.cer -key myAwesomeServer.pvk -CAfile myAwesomeCA.cer -WWW
 
-sudo docker run -p 5556:4001 dedsec995/speakez:0.1.0
-
 ssh -i speakez.pem ubuntu@34.207.91.227
 
 /home/ubuntu/cert/myAwesomeServer.cer;
@@ -15,6 +13,14 @@ ssh -i speakez.pem ubuntu@34.207.91.227
 /home/ubuntu/cert/myAwesomeServer.pvk;
 
 sudo docker build -t backend .
+
+sudo docker tag backend dedsec995/speakez:0.3.0
+
+sudo docker push dedsec995/speakez:0.3.0
+
+sudo docker pull dedsec995/speakez:0.3.0
+
+sudo docker run -p 5556:4001 dedsec995/speakez:0.3.0
 
 sudo docker run -p 5554:4001 backend
 
@@ -25,5 +31,3 @@ npm run watch (in backend)
 npx vite
 
 nginx reverse proxy on http://localhost:5556;
-
-sudo docker run -p 5556:4001 dedsec995/speakez:0.2.0
